@@ -68,19 +68,19 @@ with st.sidebar:
             try:
                 scraper = scrape_me(target_url)
                 st.session_state.form_meal_name = scraper.title()
-                st.session_state.form_ingredients = ", ".join(scraper.ingredients())
+                st.session_state.form_ingredients = "\n".join(scraper.ingredients())
             except:
                 title, ing = generic_fallback_scraper(target_url)
                 if title:
                     st.session_state.form_meal_name = title
-                    st.session_state.form_ingredients = ", ".join(ing)
+                    st.session_state.form_ingredients = "\n".join(ing)
                 else:
                     st.error("Could not extract details automatically.")
 
     # Manual Entry
     name = st.text_input("Meal Name", key="form_meal_name")
     cat = st.selectbox("Category", ["Quick & Easy", "Date Night", "Healthy", "Takeout Shortcut"], key="form_category")
-    ing = st.text_area("Ingredients (comma separated)", key="form_ingredients")
+    ing = st.text_area("Ingredients (one per line)", key="form_ingredients")
     
     if st.button("Save to Community Pool", type="primary"):
         if name:
@@ -121,7 +121,7 @@ with tab1:
         st.markdown(f"## You are having: **{choice['Meal']}**")
         st.caption(f"Category: {choice['Category']}")
         if pd.notna(choice['Ingredients']):
-            items = [i.strip() for i in str(choice['Ingredients']).split(',')]
+            items = [i.strip() for i in str(choice['Ingredients']).split('\n')]
             for item in items:
                 if item: st.checkbox(item, key=f"chk_{item}")
 

@@ -18,7 +18,10 @@ def fetch_data():
 
 # --- HELPERS: SCRAPING ---
 def get_original_recipe_url(short_url):
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.9',
+    }
     try:
         res = requests.get(short_url, headers=headers, allow_redirects=True, timeout=10)
         soup = BeautifulSoup(res.text, 'html.parser')

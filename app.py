@@ -88,6 +88,7 @@ with st.sidebar:
             updated_df = pd.concat([df, new_row], ignore_index=True)
             conn.update(data=updated_df)
             st.success(f"Added {name}!")
+            st.cache_data.clear()
             st.rerun()
         else:
             st.error("Please enter a meal name.")
@@ -101,6 +102,7 @@ with st.sidebar:
             if st.button("Wipe All Recipes (Careful!)"):
                 empty_df = pd.DataFrame(columns=["Meal", "Category", "Ingredients"])
                 conn.update(data=empty_df)
+                st.cache_data.clear()
                 st.rerun()
 
 # --- MAIN TABS ---

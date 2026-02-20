@@ -1,6 +1,6 @@
 streamlit
 pandas
-streamlit-gsheets
+st-gsheets-connection
 recipe-scrapers
 beautifulsoup4
 requests

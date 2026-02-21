@@ -133,20 +133,30 @@ tab1, tab2 = st.tabs(["🎲 The Decider", "📖 Shared Cookbook"])
 
 with tab1:
     st.header("What's for dinner?")
-    if st.button("Spin the Wheel", use_container_width=True, type="primary"):
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("🎲 Spin the Wheel", use_container_width=True, type="primary"):
+            if not df.empty:
+                choice = df.sample().iloc[0]
+                st.session_state.current_choice = choice
+                st.balloons()
+            else:
+                st.warning("The cookbook is empty!")
+
+    with col2:
         if not df.empty:
-            choice = df.sample().iloc[0]
-            st.session_state.current_choice = choice
-            st.balloons()
-        else:
-            st.warning("The cookbook is empty!")
+            meal_options = ["— Pick a meal —"] + df["Meal"].tolist()
+            selected_meal = st.selectbox("Or choose manually", meal_options, label_visibility="collapsed")
+            if selected_meal != "— Pick a meal —":
+                st.session_state.current_choice = df[df["Meal"] == selected_meal].iloc[0]
 
     if 'current_choice' in st.session_state:
         choice = st.session_state.current_choice
         st.markdown(f"## You are having: **{choice['Meal']}**")
         st.caption(f"Category: {choice['Category']}")
         if pd.notna(choice['Ingredients']):
-            # Split by Newline instead of Comma
             items = [i.strip() for i in str(choice['Ingredients']).split('\n')]
             for item in items:
                 if item: st.checkbox(item, key=f"chk_{item}")
